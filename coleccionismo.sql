@@ -137,6 +137,65 @@ VALUES
     ('Edición Limitada', 3);
 
 
+-- Inserción de datos en la tabla "Coleccionistas"
+INSERT INTO Coleccionistas (Nombre, Direccion, CorreoElectronico, NumeroTelefono)
+VALUES
+    ('Ana López', '789 Avenida Principal, Ciudad', 'ana@email.com', '+1112223333'),
+    ('Pedro Ramírez', '456 Calle Secundaria, Ciudad', 'pedro@email.com', '+4445556666'),
+    ('Isabel Torres', '123 Calle Ejemplo, Ciudad', 'isabel@email.com', '+7778889999');
+
+-- Inserción de datos en la tabla "Objetos"
+INSERT INTO Objetos (Nombre, Descripcion, Categoria, AnioFabricacion, ValorAproximado, FechaAdquisicion)
+VALUES
+    ('Pintura al óleo', 'Obra maestra del siglo XIX', 'Arte', 1875, 1000.00, '2022-04-10'),
+    ('Libro antiguo', 'Edición rara y coleccionable', 'Libros', 1905, 500.00, '2022-02-15'),
+    ('Reloj de pulsera', 'Reloj suizo de lujo', 'Relojes', 2010, 800.00, '2021-11-20');
+
+-- Inserción de datos en la tabla "Colecciones"
+INSERT INTO Colecciones (Nombre, Descripcion, IDColeccionista)
+VALUES
+    ('Colección de Arte', 'Obras de arte históricas', 1),
+    ('Colección de Libros Antiguos', 'Libros raros y coleccionables', 2),
+    ('Colección de Relojes de Lujo', 'Relojes suizos y de alta gama', 1);
+
+-- Inserción de datos en la tabla "Relacion Objeto-Coleccion"
+INSERT INTO RelacionObjetoColeccion (IDObjeto, IDColeccion)
+VALUES
+    (4, 1),
+    (5, 2),
+    (6, 3);
+
+-- Inserción de datos en la tabla "Transacciones"
+INSERT INTO Transacciones (Fecha, TipoTransaccion, Monto, Notas, IDObjeto, IDColeccionista)
+VALUES
+    ('2022-06-05', 'Compra', 500.00, 'Compra de pintura al óleo', 4, 1),
+    ('2022-03-15', 'Venta', 250.00, 'Venta de libro antiguo', 5, 2),
+    ('2021-12-01', 'Intercambio', NULL, 'Intercambio de reloj de pulsera', 6, 1);
+
+-- Inserción de datos en la tabla "Ubicacion"
+INSERT INTO Ubicacion (Ubicacion, IDObjeto)
+VALUES
+    ('Pared 1, Sala de Estar', 4),
+    ('Estantería 2, Estante 3', 5),
+    ('Caja 1', 6);
+
+-- Inserción de datos en la tabla "Eventos"
+INSERT INTO Eventos (NombreEvento, FechaEvento, DescripcionEvento, IDObjeto, IDColeccionista)
+VALUES
+    ('Exposición de Arte', '2022-08-20', 'Exposición de pinturas', 4, 1),
+    ('Feria del Libro Antiguo', '2022-09-30', 'Venta de libros raros', 5, 2),
+    ('Exposición de Relojes', '2021-10-10', 'Exhibición de relojes suizos', 6, 1);
+
+-- Inserción de datos en la tabla "Etiquetas"
+INSERT INTO Etiquetas (Etiqueta, IDObjeto)
+VALUES
+    ('Óleo', 4),
+    ('Antiguo', 5),
+    ('Lujo', 6);
+
+
+
+
 -- Creación de vistas
 
 CREATE VIEW VistaObjetosYUbicaciones AS
