@@ -229,4 +229,18 @@ FROM Colecciones
 LEFT JOIN RelacionObjetoColeccion ON Colecciones.ID = RelacionObjetoColeccion.IDColeccion
 GROUP BY Colecciones.ID, Colecciones.Nombre;
 
+CREATE VIEW VistaObjetosConValorTotal AS
+SELECT
+    C.ID AS ColeccionID,
+    C.Nombre AS NombreColeccion,
+    O.ID AS ObjetoID,
+    O.Nombre AS NombreObjeto,
+    O.ValorAproximado,
+    COALESCE(SUM(O2.ValorAproximado), 0) AS ValorTotalColeccion
+FROM Colecciones C
+INNER JOIN RelacionObjetoColeccion RC ON C.ID = RC.IDColeccion
+INNER JOIN Objetos O ON RC.IDObjeto = O.ID
+LEFT JOIN RelacionObjetoColeccion RC2 ON RC2.IDColeccion = C.ID
+LEFT JOIN Objetos O2 ON RC2.IDObjeto = O2.ID
+GROUP BY C.ID, C.Nombre, O.ID, O.Nombre, O.ValorAproximado;
 
