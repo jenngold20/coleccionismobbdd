@@ -244,3 +244,76 @@ LEFT JOIN RelacionObjetoColeccion RC2 ON RC2.IDColeccion = C.ID
 LEFT JOIN Objetos O2 ON RC2.IDObjeto = O2.ID
 GROUP BY C.ID, C.Nombre, O.ID, O.Nombre, O.ValorAproximado;
 
+
+
+-- Función DETERMINISTIC
+DELIMITER //
+CREATE FUNCTION MiFuncionDeterministica(p1 INT, p2 INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE resultado INT;
+    SET resultado = p1 + p2;
+    RETURN resultado;
+END;
+//
+DELIMITER ;
+
+-- Función READS SQL DATA
+DELIMITER //
+CREATE FUNCTION MiFuncionLeerDesdeSQL(p1 INT)
+RETURNS VARCHAR(255)
+READS SQL DATA
+BEGIN
+    DECLARE resultado VARCHAR(255);
+    SELECT Nombre FROM TablaEjemplo WHERE ID = p1 INTO resultado;
+    RETURN resultado;
+END;
+//
+DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE FUNCTION CalcularValorTotalColeccion(coleccionID INT)
+RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE valorTotal DECIMAL(10, 2);
+    SELECT COALESCE(SUM(Objetos.ValorAproximado), 0) INTO valorTotal
+    FROM Colecciones
+    LEFT JOIN RelacionObjetoColeccion ON Colecciones.ID = RelacionObjetoColeccion.IDColeccion
+    LEFT JOIN Objetos ON RelacionObjetoColeccion.IDObjeto = Objetos.ID
+    WHERE Colecciones.ID = coleccionID;
+    RETURN valorTotal;
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION ColeccionistaMasValioso()
+RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE coleccionistaNombre VARCHAR(100);
+    SELECT Coleccionistas.Nombre INTO coleccionistaNombre
+    FROM Coleccionistas
+    LEFT JOIN Colecciones ON Coleccionistas.ID = Colecciones.IDColeccionista
+    WHERE Colecciones.ID IN (SELECT IDColeccion FROM RelacionObjetoColeccion)
+    ORDER BY (SELECT COALESCE(SUM(Objetos.ValorAproximado), 0)
+            FROM Objetos
+            WHERE Objetos.ID IN (SELECT IDObjeto FROM RelacionObjetoColeccion)
+        ) DESC
+    LIMIT 1;
+    RETURN coleccionistaNombre;
+END;
+//
+
+DELIMITER ;
+
+
+-- -------------------------------------------
+
