@@ -317,3 +317,38 @@ DELIMITER ;
 
 -- -------------------------------------------
 
+DELIMITER //
+
+-- Crear el procedimiento almacenado
+CREATE PROCEDURE ActualizarValorTotalColeccion(IN coleccionID INT)
+BEGIN
+    DECLARE valorTotal DECIMAL(10, 2);
+    -- Llamar a la función para calcular el valor total de la colección
+    SET valorTotal = CalcularValorTotalColeccion(coleccionID);
+    -- Actualizar el valor total en la tabla de colecciones
+    UPDATE Colecciones
+    SET ValorTotal = valorTotal
+    WHERE ID = coleccionID;
+END;
+//
+
+DELIMITER ;
+
+-- CALL ActualizarValorTotalColeccion(1); 
+
+
+DELIMITER //
+
+-- Crear el procedimiento almacenado
+CREATE PROCEDURE BuscarObjetosPorEtiqueta(IN etiquetaABuscar VARCHAR(50))
+BEGIN
+    SELECT Objetos.Nombre, Objetos.Descripcion, Objetos.Categoria
+    FROM Objetos
+    LEFT JOIN Etiquetas ON Objetos.ID = Etiquetas.IDObjeto
+    WHERE Etiquetas.Etiqueta = etiquetaABuscar;
+END;
+//
+
+DELIMITER ;
+
+-- CALL BuscarObjetosPorEtiqueta('Raro');
