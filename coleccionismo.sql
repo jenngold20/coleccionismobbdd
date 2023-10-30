@@ -395,3 +395,24 @@ END;
 
 DELIMITER ;
 
+
+-- Crear usuario1 con contraseña1
+CREATE USER 'usuario1'@'localhost' IDENTIFIED BY 'contraseña1';
+
+-- Crear usuario2 con contraseña2
+CREATE USER 'usuario2'@'localhost' IDENTIFIED BY 'contraseña2';
+
+-- Crear usuario3 con contraseña3
+CREATE USER 'usuario3'@'localhost' IDENTIFIED BY 'contraseña3';
+
+-- Otorgar privilegios al usuario1
+GRANT SELECT, INSERT, UPDATE ON nombre_basedatos.* TO 'usuario1'@'localhost';
+
+-- Otorgar privilegios al usuario2
+GRANT SELECT, DELETE ON otra_basedatos.* TO 'usuario2'@'localhost';
+
+-- Otorgar privilegios al usuario3
+GRANT ALL PRIVILEGES ON base_de_datos.* TO 'usuario3'@'localhost';
+
+
+
