@@ -352,3 +352,46 @@ END;
 DELIMITER ;
 
 -- CALL BuscarObjetosPorEtiqueta('Raro');
+
+DELIMITER //
+
+-- Crear el trigger
+CREATE TRIGGER RegistroCambiosObjetos
+AFTER UPDATE ON Objetos
+FOR EACH ROW
+BEGIN
+    INSERT INTO RegistroCambios (Tabla, Accion, ObjetoID, Fecha)
+    VALUES ('Objetos', 'Actualización', NEW.ID, NOW());
+END;
+//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+-- Crear el trigger
+CREATE TRIGGER ControlInventarioObjetos
+AFTER INSERT ON RelacionObjetoColeccion
+FOR EACH ROW
+BEGIN
+    DECLARE cantidadActual INT;
+    DECLARE cantidadMaxima INT;
+    
+    SELECT COUNT(*) INTO cantidadActual
+    FROM RelacionObjetoColeccion
+    WHERE IDObjeto = NEW.IDObjeto;
+    
+    SELECT Objetos.CantidadMaxima INTO cantidadMaxima
+    FROM Objetos
+    WHERE Objetos.ID = NEW.IDObjeto;
+    
+    IF cantidadActual > cantidadMaxima THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Inventario excedido para el objeto.';
+    END IF;
+END;
+//
+
+DELIMITER ;
+
